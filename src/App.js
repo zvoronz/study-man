@@ -1,15 +1,16 @@
 import React from 'react';
 import './App.css';
-import chimestryBooklet from './output.json';
+import chemicalBooklet from './chemicalBooklet';
 import Question from './components/Question';
 import { Button, Card, CardTitle, Input,
          InputGroup, InputGroupAddon }
 from 'reactstrap';
 import Switch from 'react-switch';
 
-function getQuestionWith4Answers(index) {
-  let question = chimestryBooklet[index];
+function getQuestionWith4Answers(index) {  
+  let question = chemicalBooklet.questions[index];
   let answers = [];
+  debugger;
   for(let i = 0; i < 4;) {
     let answer = question.answers[Math.floor(Math.random() * question.answers.length)];
     if (answers.find((element) => element.key === answer.key) === undefined) {
@@ -25,7 +26,7 @@ function getQuestionWith4Answers(index) {
 function getNQuestions(amount) {
   let questions = [];
   for(let i = 0; i < amount;) {
-    let question = getQuestionWith4Answers(Math.floor(Math.random() * chimestryBooklet.length + 1));
+    let question = getQuestionWith4Answers(Math.floor(Math.random() * chemicalBooklet.questions.length));
     if (questions.find((element) => element.key === question.key) === undefined) {
       ++i;
       questions.push(question);

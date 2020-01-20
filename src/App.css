@@ -17,6 +17,7 @@ img {
 
 .wa-900px {
   width: 900px;
+  min-width: 400px;
 }
 
 .react-switch {
