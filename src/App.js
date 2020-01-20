@@ -89,7 +89,7 @@ class App extends React.Component {
   onSpinChange = (event) => {
     let value = event.currentTarget.value;
     let newState = {};
-    newState[event.currentTarget.id ] = value;
+    newState[event.currentTarget.id] = parseInt(value);
     this.setState(newState);
   }
 
