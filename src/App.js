@@ -5,9 +5,11 @@ import biologyBooklet from './biologyBooklet';
 import Question from './components/Question';
 import QuizResults from './components/QuizResults';
 import { Button, Card, CardTitle, Input,
-         InputGroup, InputGroupAddon }
+         InputGroup, InputGroupAddon, CardBody }
 from 'reactstrap';
 import Switch from 'react-switch';
+import Timer from 'react-compound-timer';
+
 
 function checkIfHasLeastOneCorrect(answers) {
   for (let i = 0; i < answers.length; ++i) {
@@ -107,6 +109,15 @@ class App extends React.Component {
         <Card className='mx-auto mt-5 wa-900px'>
           <CardTitle className='text-center h1'>{this.bookletName}</CardTitle>
         </Card>
+        <Card className='mx-auto mt-2 wa-900px sticky-top text-center h3'>
+          <CardBody id='timer'>
+            <Timer formatValue={(value) => `${(value < 10 ? `0${value}` : value)}`} >
+              <Timer.Hours />:
+              <Timer.Minutes />:
+              <Timer.Seconds />
+            </Timer>
+          </CardBody>
+        </Card>
         {this.questions.map((item, index) => <Question key={item.key}
                                             index={index + 1}
                                             bookletId={item.key}
@@ -116,7 +127,8 @@ class App extends React.Component {
         <div className='d-flex flex-column'>
           <Button color='success mx-auto mb-5 wa-900px' onClick={() => {
             this.currentRender = this.renderResults;
-            this.setState({});
+            const elapsedTime = document.getElementById('timer').innerText;
+            this.setState({elapsedTime: elapsedTime});
           }} >Result</Button>
         </div>
       </div>
@@ -130,7 +142,7 @@ class App extends React.Component {
 
   renderResults = () => {
     return (
-      <QuizResults questions={this.questions} onResultsOk={this.onResultsOk}/>
+      <QuizResults questions={this.questions} onResultsOk={this.onResultsOk} elapsedTime={this.state.elapsedTime}/>
     );
   }
 
