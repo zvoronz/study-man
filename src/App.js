@@ -9,26 +9,28 @@ import { Button, Card, CardTitle, Input,
 from 'reactstrap';
 import Switch from 'react-switch';
 
-function getQuestionWith4Answers(booklet, index) {
+function getQuestionWithNAnswers(booklet, index, answersAmount) {
   let question = booklet.questions[index];
   question.key = parseInt(question.key);
   let answers = [];
-  for(let i = 0; i < 4;) {
-    let answer = question.answers[Math.floor(Math.random() * question.answers.length)];
-    if (answers.find((element) => element.key === answer.key) === undefined) {
-      ++i;
-      answer['isSelected'] = false;
-      answers.push(answer);
+  if (answersAmount < question.answers.length) {
+    for(let i = 0; i < answersAmount;) {
+      let answer = question.answers[Math.floor(Math.random() * question.answers.length)];
+      if (answers.find((element) => element.key === answer.key) === undefined) {
+        ++i;
+        answer['isSelected'] = false;
+        answers.push(answer);
+      }
     }
+    question.answers = answers;
   }
-  question.answers = answers;
   return question;
 }
 
-function getNQuestions(booklet, amount) {
+function getNQuestions(booklet, amount, answersAmount) {
   let questions = [];
   for(let i = 0; i < amount;) {
-    let question = getQuestionWith4Answers(booklet, Math.floor(Math.random() * booklet.questions.length));
+    let question = getQuestionWithNAnswers(booklet, Math.floor(Math.random() * booklet.questions.length), answersAmount);
     if (questions.find((element) => element.key === question.key) === undefined) {
       ++i;
       questions.push(question);
@@ -37,7 +39,7 @@ function getNQuestions(booklet, amount) {
   return questions;
 }
 
-function getNRangedQuestions(booklet, amount, start, end) {  
+function getNRangedQuestions(booklet, amount, start, end, answersAmount) {  
   let questions = [];
   
   if (amount === 0 || isNaN(amount)) {
@@ -45,7 +47,7 @@ function getNRangedQuestions(booklet, amount, start, end) {
   }
 
   for(let i = 0; i < amount;) {
-    let question = getQuestionWith4Answers(booklet, (start - 1) + Math.floor(Math.random() * (end - start + 1)));
+    let question = getQuestionWithNAnswers(booklet, (start - 1) + Math.floor(Math.random() * (end - start + 1)), answersAmount);
     if (questions.find((element) => element.key === question.key) === undefined) {
       ++i;
       questions.push(question);
@@ -69,9 +71,9 @@ class App extends React.Component {
                   last:0,
                   questions:100,
                   questionsInRange:0,
-                  isDebug:isDebug
-                };    
-    console.log(isDebug);
+                  isDebug:isDebug,
+                  answersAmount:isDebug ? 8 : 4
+                };
   }
 
   onQuestionAnswered = (key, answers) => {
@@ -170,10 +172,10 @@ class App extends React.Component {
           <Button className='mx-2' color='primary' disabled={isButtonDisabled} 
             onClick={() => {
               if (this.state.checked) {
-                this.questions = getNRangedQuestions(chemicalBooklet, this.state.questionsInRange, this.state.first, this.state.last);
+                this.questions = getNRangedQuestions(chemicalBooklet, this.state.questionsInRange, this.state.first, this.state.last, this.state.answersAmount);
               }
               else {
-                this.questions = getNQuestions(chemicalBooklet, this.state.questions)
+                this.questions = getNQuestions(chemicalBooklet, this.state.questions, this.state.answersAmount)
               }
               this.currentRender = this.renderQuiz;
               this.bookletName = chemicalBooklet.name;
@@ -186,10 +188,10 @@ class App extends React.Component {
           <Button className='my-2 mx-2' color='primary' disabled={isButtonDisabled}
             onClick={() => {
               if (this.state.checked) {
-                this.questions = getNRangedQuestions(biologyBooklet, this.state.questionsInRange, this.state.first, this.state.last);
+                this.questions = getNRangedQuestions(biologyBooklet, this.state.questionsInRange, this.state.first, this.state.last, this.state.answersAmount);
               }
               else {
-                this.questions = getNQuestions(biologyBooklet, this.state.questions)
+                this.questions = getNQuestions(biologyBooklet, this.state.questions, this.state.answersAmount)
               }
               this.bookletName = biologyBooklet.name;
               this.currentRender = this.renderQuiz;

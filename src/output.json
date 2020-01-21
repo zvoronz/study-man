@@ -1,6 +1,4 @@
-let chemicalBooklet = {
-    "name": "Chemistry Booklet 2019",
-    "questions":[
+[
     {
         "answers": [
             {
@@ -1978,52 +1976,6 @@ let chemicalBooklet = {
         ], 
         "body": "The solution is alkaline if:", 
         "key": 43
-    }, 
-    {
-        "answers": [
-            {
-                "body": "<em>c</em>(H<sub>3</sub>O<sup>+</sup>)\t= 2\u00d710<sup>-8 </sup>mol.l<sup>-1</sup>", 
-                "isCorrect": true, 
-                "key": "a"
-            }, 
-            {
-                "body": "<em>c</em>(OH<sup>-</sup>)\t= 7\u00d710<sup>-10 </sup>mol.l<sup>-1</sup>", 
-                "isCorrect": false, 
-                "key": "b"
-            }, 
-            {
-                "body": "<em>c</em>(H<sub>3</sub>O<sup>+</sup>)\t=  1\u00d710<sup>-7 </sup>mol.l<sup>-1</sup>", 
-                "isCorrect": false, 
-                "key": "c"
-            }, 
-            {
-                "body": "<em>c</em>(H<sub>3</sub>O<sup>+</sup>)\t=  7\u00d710<sup>-1 </sup>mol.l<sup>-1</sup>", 
-                "isCorrect": false, 
-                "key": "d"
-            }, 
-            {
-                "body": "<em>c</em>(H<sub>3</sub>O<sup>+</sup>)\t=  1\u00d710<sup>-6 </sup>mol.l<sup>-1</sup>", 
-                "isCorrect": false, 
-                "key": "e"
-            }, 
-            {
-                "body": "<em>c</em>(OH<sup>-</sup>)\t=  1\u00d710<sup>-7 </sup>mol.l<sup>-1</sup>", 
-                "isCorrect": false, 
-                "key": "f"
-            }, 
-            {
-                "body": "<em>c</em>(OH<sup>-</sup>)\t=  7\u00d710<sup>-3 </sup>mol.l<sup>-1</sup>", 
-                "isCorrect": true, 
-                "key": "g"
-            }, 
-            {
-                "body": "<em>c</em>(H<sub>3</sub>O<sup>+</sup>)\t= 2\u00d710<sup>-12 </sup>mol.l<sup>-1</sup>", 
-                "isCorrect": true, 
-                "key": "h"
-            }
-        ], 
-        "body": "The solution is alkaline if:", 
-        "key": 44
     }, 
     {
         "answers": [
@@ -27233,5 +27185,4 @@ let chemicalBooklet = {
         "body": "Coenzyme FAD contains the following compound in its molecule:", 
         "key": 750
     }
-]};
-export default chemicalBooklet;
+]
