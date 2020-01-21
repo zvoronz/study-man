@@ -17,7 +17,7 @@ class QuizResults extends React.Component
 
     render()
     {
-        let {questions} = this.props;
+        let {questions, elapsedTime} = this.props;
 
         let pointsReached = 0, pointsFull = 0, trueAnswers = 0;
         questions.map((question) => {
@@ -53,6 +53,7 @@ class QuizResults extends React.Component
                 <CardBody>
                     <CardText className='text-center h4'>Points: {pointsReached}/{pointsFull}</CardText>
                     <CardText className='text-center h4'>Score: {truePercents}%</CardText>
+                    <CardText className='text-center h4'>Elapsed time: {elapsedTime}</CardText>
                 </CardBody>
               </Card>
               {questions.map((item, index) => <Question key={item.key}
