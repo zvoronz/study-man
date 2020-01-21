@@ -1,4 +1,5 @@
 let chemicalBooklet = {
+    "name": "Chemistry Booklet 2019",
     "questions":
     [
         {

@@ -1,16 +1,18 @@
 import React from 'react';
 import './App.css';
 import chemicalBooklet from './chemicalBooklet';
+import biologyBooklet from './biologyBooklet';
 import Question from './components/Question';
+import QuizResults from './components/QuizResults';
 import { Button, Card, CardTitle, Input,
          InputGroup, InputGroupAddon }
 from 'reactstrap';
 import Switch from 'react-switch';
 
-function getQuestionWith4Answers(index) {  
-  let question = chemicalBooklet.questions[index];
+function getQuestionWith4Answers(booklet, index) {
+  let question = booklet.questions[index];
+  question.key = parseInt(question.key);
   let answers = [];
-  debugger;
   for(let i = 0; i < 4;) {
     let answer = question.answers[Math.floor(Math.random() * question.answers.length)];
     if (answers.find((element) => element.key === answer.key) === undefined) {
@@ -23,10 +25,10 @@ function getQuestionWith4Answers(index) {
   return question;
 }
 
-function getNQuestions(amount) {
+function getNQuestions(booklet, amount) {
   let questions = [];
   for(let i = 0; i < amount;) {
-    let question = getQuestionWith4Answers(Math.floor(Math.random() * chemicalBooklet.questions.length));
+    let question = getQuestionWith4Answers(booklet, Math.floor(Math.random() * booklet.questions.length));
     if (questions.find((element) => element.key === question.key) === undefined) {
       ++i;
       questions.push(question);
@@ -35,11 +37,14 @@ function getNQuestions(amount) {
   return questions;
 }
 
-function getRangedQuestions(start, end) {
+function getNRangedQuestions(booklet, amount, start, end) {
   let questions = [];
-  for(let i = start - 1; i < end; ++i) {
-    let question = getQuestionWith4Answers(i);
-    questions.push(question);
+  for(let i = 0; i < amount;) {
+    let question = getQuestionWith4Answers(booklet, (start - 1) + Math.floor(Math.random() * (end - start + 1)));
+    if (questions.find((element) => element.key === question.key) === undefined) {
+      ++i;
+      questions.push(question);
+    }
   }
   return questions;
 }
@@ -52,14 +57,18 @@ class App extends React.Component {
   constructor() {
     super();
     this.currentRender = this.renderMainMenu;
-    this.state = {checked: false, first:0, last:0, questions:0};
+    this.state = {checked: false,
+                  first:0,
+                  last:0,
+                  questions:100,
+                  questionsInRange:0
+                };
   }
 
   onQuestionAnswered = (key, answers) => {
     for (let i = 0; i < this.questions.length; ++i) {
       if (key === this.questions[i].key) {
         this.questions[i]['answers'] = answers;
-        console.log(this.questions[i]);
       }
     }
   }
@@ -76,9 +85,23 @@ class App extends React.Component {
                                             answers={item.answers}
                                             onQuestionAnswered={this.onQuestionAnswered}/>)}
         <div className='d-flex flex-column'>
-          <Button color='success mx-auto mb-5 wa-900px'>Result</Button>
+          <Button color='success mx-auto mb-5 wa-900px' onClick={() => {
+            this.currentRender = this.renderResults;
+            this.setState({});
+          }} >Result</Button>
         </div>
       </div>
+    );
+  }
+
+  onResultsOk = () => {
+    this.currentRender = this.renderMainMenu;
+    this.setState({});
+  }
+
+  renderResults = () => {
+    return (
+      <QuizResults questions={this.questions} onResultsOk={this.onResultsOk}/>
     );
   }
 
@@ -92,15 +115,19 @@ class App extends React.Component {
     let newState = {};
     newState[event.currentTarget.id] = parseInt(value);
     this.setState(newState);
+    console.log(this.state)
   }
 
   f = () => {
     if (this.state.checked) {
-      return (<><Input id='first' value={this.state.first ? this.state.first : ''} placeholder='# First Q' min={1} max={749} type='number' step='1' onChange={this.onSpinChange} />
-              <Input id='last' value={this.state.last ? this.state.last : ''}placeholder='# Last Q' min={2} max={750} type='number' step='1' onChange={this.onSpinChange} /></>);
+      return (<>
+        <Input id='questionsInRange' value={this.state.questionsInRange ? this.state.questionsInRange : ''} placeholder='# Questions' min={1} max={750} type='number' step='1' onChange={this.onSpinChange}/>
+        <Input id='first' value={this.state.first ? this.state.first : ''} placeholder='# First Q' min={1} max={749} type='number' step='1' onChange={this.onSpinChange} />
+        <Input className='mr-2' id='last' value={this.state.last ? this.state.last : ''}placeholder='# Last Q' min={2} max={750} type='number' step='1' onChange={this.onSpinChange} />
+      </>);
     }
     else {
-      return (<Input id='questions' value={this.state.questions ? this.state.questions : ''} placeholder='# Questions' min={1} max={100} type='number' step='1' onChange={this.onSpinChange}/>);
+      return (<Input className='mr-2' disabled id='questions' value={this.state.questions ? this.state.questions : ''} placeholder='# Questions' min={1} max={100} type='number' step='1' onChange={this.onSpinChange}/>);
     }
   }
 
@@ -108,7 +135,7 @@ class App extends React.Component {
     return (
       <div className='content mx-auto wa-900px'>
         <Card className='mt-5'>
-          <CardTitle className='text-center h1'>Chemical Quiz 2020</CardTitle>
+          <CardTitle className='text-center h1'>Quiz 2019</CardTitle>
           <InputGroup className='my-5'>
             <Switch
               checked={this.state.checked}
@@ -128,17 +155,29 @@ class App extends React.Component {
             <InputGroupAddon addonType='prepend'>Deck of 750 questions</InputGroupAddon>
             {this.f()}
           </InputGroup>
-          <Button color='primary' disabled={(this.state.checked && this.state.last <= this.state.first) || (!this.state.checked && this.state.questions <= 0)} 
+          <Button className='mx-2' color='primary' disabled={this.state.checked && ((this.state.last <= this.state.first) || (this.state.questionsInRange > (this.state.last - this.state.first + 1)))} 
             onClick={() => {
               if (this.state.checked) {
-                this.questions = getRangedQuestions(this.state.first, this.state.last);
+                this.questions = getNRangedQuestions(chemicalBooklet, this.state.questionsInRange, this.state.first, this.state.last);
               }
               else {
-                this.questions = getNQuestions(this.state.questions)
+                this.questions = getNQuestions(chemicalBooklet, this.state.questions)
               }
               this.currentRender = this.renderQuiz;
               this.setState({});}}>
-            Start
+            {chemicalBooklet.name}
+          </Button>
+          <Button className='my-2 mx-2' color='primary' disabled={this.state.checked && ((this.state.last <= this.state.first) || (this.state.questionsInRange > (this.state.last - this.state.first + 1)))} 
+            onClick={() => {
+              if (this.state.checked) {
+                this.questions = getNRangedQuestions(biologyBooklet, this.state.questionsInRange, this.state.first, this.state.last);
+              }
+              else {
+                this.questions = getNQuestions(biologyBooklet, this.state.questions)
+              }
+              this.currentRender = this.renderQuiz;
+              this.setState({});}}>
+            {biologyBooklet.name}
           </Button>
         </Card>
       </div>

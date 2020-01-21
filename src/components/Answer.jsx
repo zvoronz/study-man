@@ -5,10 +5,8 @@ import {
 
 class Answer extends React.Component
 {
-    constructor()
-    {
+    constructor() {
         super();
-
         this.state = {};
     }
 
@@ -16,16 +14,26 @@ class Answer extends React.Component
         this.props.handleAnswer(this.props.answerId)
     }
 
-    render()
-    {
-        const {answer, isSelected} = this.props;
-
-        return (<Button outline={!isSelected}
-                        color={isSelected ? 'primary' : 'secondary'}
-                        className='mt-1'
-                        onClick={this.onAnswerSelected}>
-                    <span dangerouslySetInnerHTML={{__html:answer}} />
-                </Button>)
+    render() {
+        const {answer, isSelected, showAnswers, isCorrect} = this.props;
+        if (showAnswers === undefined || showAnswers === false) {
+            return (<Button outline={!isSelected}
+                            color={isSelected ? 'primary' : 'secondary'}
+                            className='mt-1'
+                            onClick={this.onAnswerSelected}>
+                        <span dangerouslySetInnerHTML={{__html:answer}} />
+                    </Button>);
+        }
+        else {
+            let color = isSelected ? isCorrect ? 'success' : 'danger' : 'secondary';
+            return (<Button outline={!isSelected}
+                        color={color}
+                        className={'mt-0 disable__' + color}
+                        disabled
+                        active={false}>
+                        <span dangerouslySetInnerHTML={{__html:answer}} />
+                    </Button>);
+        }
     }
 
 }

@@ -1,18 +1,18 @@
 import React from 'react';
 import Answer from './Answer'
 import {
-    Card,CardBody,CardText, CardHeader
+    Card, CardBody, CardText, CardHeader, Collapse
   } from'reactstrap';
   
 
 class Question extends React.Component
 {
-    constructor(props)
-    {
+    constructor(props) {
         super(props);
 
         this.state = {
-            answers: props.answers
+            answers: props.answers,
+            open: props.isCorrect !== undefined ? !props.isCorrect : true
         };
     }
 
@@ -29,23 +29,32 @@ class Question extends React.Component
         this.setState({answers:answers});
     }
 
-    render()
-    {
-        const {question, answers, index} = this.props;
+    render() {
+        const {question, answers, index, isStatic, isCorrect} = this.props;
+        const {open} = this.state;
         return (
-            <Card className='mx-auto my-5 wa-900px'>
+            <Card className={(isStatic ? 'my-1' : 'my-5') + ' mx-auto wa-900px'}>
                 <CardBody>
-                    <CardHeader><span dangerouslySetInnerHTML={{__html:'<strong>'+ index + '. ' + question + '</strong>'}} /></CardHeader>
-                    <CardText className='d-flex flex-column'>
-                        {answers.map(item => <Answer key={item.key}
-                                                     answer={item.body}
-                                                     answerId={item.key}
-                                                     isCorrect={item.isCorrect}
-                                                     isSelected={item.isSelected}
-                                                     handleAnswer={this.handleAnswerClick} />)}
-                    </CardText>
+                    <CardHeader aria-expanded={open}
+                                aria-controls='collapse-card-text'
+                                onClick={() => this.setState({'open':!open})}
+                                className={(isStatic ? 'mb-1' : '') + (isCorrect ? ' bg-success' : '')}>
+                        <span dangerouslySetInnerHTML={{__html:'<strong>' + index + '. ' + question + '</strong>'}} />
+                    </CardHeader>
+                    <Collapse isOpen={isStatic ? open : true}>
+                        <CardText id='collapse-card-text' className='d-flex flex-column animated fadeOutUp delay-5s'>
+                            {answers.map(item => <Answer key={item.key}
+                                                        answer={item.body}
+                                                        answerId={item.key}
+                                                        isCorrect={item.isCorrect}
+                                                        isSelected={item.isSelected}
+                                                        handleAnswer={this.handleAnswerClick} 
+                                                        showAnswers={isStatic} />)}
+                        </CardText>
+                    </Collapse>
                 </CardBody>
-            </Card>)
+            </Card>
+        );
     }
 }
 

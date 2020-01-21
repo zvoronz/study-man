@@ -29,3 +29,13 @@ img {
 button > span {
   color: black;
 }
+
+.disable__secondary:hover {
+  background-color: transparent;
+}
+.disable__success:hover {
+  background-color: #28a745;
+}
+.disable__danger:hover {
+  background-color: #dc3545;
+}
