@@ -54,8 +54,8 @@ class QuizResults extends React.Component
                     <CardText className='text-center h4'>Score: {truePercents}%</CardText>
                 </CardBody>
               </Card>
-              {questions.map(item => <Question key={item.key}
-                                                  index={item.key}
+              {questions.map((item, index) => <Question key={item.key}
+                                                  index={this.state.isDebug ? item.key : index + 1}
                                                   question={item.body}
                                                   answers={item.answers}
                                                   isCorrect={item.allCorrect}
