@@ -9,17 +9,34 @@ import { Button, Card, CardTitle, Input,
 from 'reactstrap';
 import Switch from 'react-switch';
 
+function checkIfHasLeastOneCorrect(answers) {
+  for (let i = 0; i < answers.length; ++i) {
+    if (answers[i].isCorrect) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function getQuestionWithNAnswers(booklet, index, answersAmount) {
   let question = booklet.questions[index];
   question.key = parseInt(question.key);
-  let answers = [];
+  let answers = [];  
   if (answersAmount < question.answers.length) {
     for(let i = 0; i < answersAmount;) {
       let answer = question.answers[Math.floor(Math.random() * question.answers.length)];
       if (answers.find((element) => element.key === answer.key) === undefined) {
         ++i;
-        answer['isSelected'] = false;
+        answer['isSelected'] = false;        
         answers.push(answer);
+
+        if (i === answersAmount) {
+          const noAnyCorrect = !checkIfHasLeastOneCorrect(answers);
+          if (noAnyCorrect) {
+            answers = [];
+            i = 0;
+          }
+        }
       }
     }
     question.answers = answers;
@@ -91,7 +108,8 @@ class App extends React.Component {
           <CardTitle className='text-center h1'>{this.bookletName}</CardTitle>
         </Card>
         {this.questions.map((item, index) => <Question key={item.key}
-                                            index={this.state.isDebug ? item.key : index + 1}
+                                            index={index + 1}
+                                            bookletId={item.key}
                                             question={item.body}
                                             answers={item.answers}
                                             onQuestionAnswered={this.onQuestionAnswered}/>)}
@@ -126,7 +144,6 @@ class App extends React.Component {
     let newState = {};
     newState[event.currentTarget.id] = parseInt(value);
     this.setState(newState);
-    console.log(this.state)
   }
 
   f = () => {

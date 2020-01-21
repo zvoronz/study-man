@@ -25,12 +25,12 @@ class Question extends React.Component
                 answers[i]['isSelected'] = !answers[i]['isSelected'];
             }
         }
-        this.props.onQuestionAnswered(this.props.index, answers);
+        this.props.onQuestionAnswered(this.props.bookletId, answers);
         this.setState({answers:answers});
     }
 
     render() {
-        const {question, answers, index, isStatic, isCorrect} = this.props;
+        const {question, answers, index, bookletId, isStatic, isCorrect} = this.props;
         const {open} = this.state;
         return (
             <Card className={(isStatic ? 'my-1' : 'my-5') + ' mx-auto wa-900px'}>
@@ -40,6 +40,9 @@ class Question extends React.Component
                                 onClick={() => this.setState({'open':!open})}
                                 className={(isStatic ? 'mb-1' : '') + (isCorrect ? ' bg-success' : '')}>
                         <span dangerouslySetInnerHTML={{__html:'<strong>' + index + '. ' + question + '</strong>'}} />
+                        <p className={(!isStatic ? 'd-none ' : '') + 'text-danger text-right mb-0'}>
+                            Question #{bookletId} in booklet!
+                        </p>
                     </CardHeader>
                     <Collapse isOpen={isStatic ? open : true}>
                         <CardText id='collapse-card-text' className='d-flex flex-column animated fadeOutUp delay-5s'>

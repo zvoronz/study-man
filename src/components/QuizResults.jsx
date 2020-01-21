@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Button, Card, CardTitle, CardText, CardHeader, CardBody
+    Button, Card, CardTitle, CardText, CardBody
   } from'reactstrap';
 import Question from './Question';
 
@@ -37,6 +37,7 @@ class QuizResults extends React.Component
                         fullAnswerCorrect = false;
                     }
                 }
+                return answer;
             });
             question.allCorrect = fullAnswerCorrect;
             if (fullAnswerCorrect) {
@@ -55,7 +56,8 @@ class QuizResults extends React.Component
                 </CardBody>
               </Card>
               {questions.map((item, index) => <Question key={item.key}
-                                                  index={this.state.isDebug ? item.key : index + 1}
+                                                  index={index + 1}
+                                                  bookletId={item.key}
                                                   question={item.body}
                                                   answers={item.answers}
                                                   isCorrect={item.allCorrect}
