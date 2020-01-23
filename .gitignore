@@ -28,3 +28,6 @@ yarn-error.log*
 .tar.gz
 .7z
 .rar
+
+#python
+.pyc
