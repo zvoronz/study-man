@@ -23,11 +23,11 @@ yarn-debug.log*
 yarn-error.log*
 
 # archives
-.zip
-.gz
-.tar.gz
-.7z
-.rar
+*.zip
+*.gz
+*.tar.gz
+*.7z
+*.rar
 
 #python
-.pyc
+*.pyc

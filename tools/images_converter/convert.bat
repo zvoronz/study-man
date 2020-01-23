@@ -1,0 +1,1 @@
+for %%F in (word\media\*.png) do remove_background.exe word\media\%%~nF.png word\media\%%~nF.png
