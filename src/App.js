@@ -124,11 +124,12 @@ class App extends React.Component {
                                             question={item.body}
                                             answers={item.answers}
                                             onQuestionAnswered={this.onQuestionAnswered}/>)}
-        <div className='d-flex flex-column'>
-          <Button color='success mx-auto mb-5 wa-900px' onClick={() => {
+        <div className='d-flex flex-column wa-900px mx-auto'>
+          <Button color='success flex-fill' onClick={() => {
             this.currentRender = this.renderResults;
             const elapsedTime = document.getElementById('timer').innerText;
             this.setState({elapsedTime: elapsedTime});
+            window.scrollTo(0, 0);
           }} >Result</Button>
         </div>
       </div>

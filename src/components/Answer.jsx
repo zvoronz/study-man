@@ -10,8 +10,9 @@ class Answer extends React.Component
         this.state = {};
     }
 
-    onAnswerSelected = () => {
-        this.props.handleAnswer(this.props.answerId)
+    onAnswerSelected = (e) => {
+        this.props.handleAnswer(this.props.answerId);
+        e.target.focus = false;
     }
 
     render() {

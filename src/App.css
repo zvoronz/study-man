@@ -16,8 +16,8 @@ img {
 }
 
 .wa-900px {
-  width: 900px;
-  min-width: 400px;
+  max-width: 900px;
+  min-width: 300px;
 }
 
 .react-switch {
@@ -30,6 +30,10 @@ button > span {
   color: black;
 }
 
+img {
+  max-width: 100%;
+}
+
 .disable__secondary:hover {
   background-color: transparent;
 }
@@ -38,4 +42,10 @@ button > span {
 }
 .disable__danger:hover {
   background-color: #dc3545;
+}
+
+.btn-outline-secondary:focus, .btn-outline-secondary:hover {
+  background-color: transparent;
+  outline: none;
+  box-shadow: none;
 }
