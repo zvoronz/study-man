@@ -49,3 +49,7 @@ img {
   outline: none;
   box-shadow: none;
 }
+
+.ml-7 {
+  margin-left: 4.7rem!important;
+}

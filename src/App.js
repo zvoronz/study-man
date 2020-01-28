@@ -9,6 +9,7 @@ import { Button, Card, CardTitle, Input,
 from 'reactstrap';
 import Switch from 'react-switch';
 import Timer from 'react-compound-timer';
+import { isAndroid } from "react-device-detect";
 
 
 function checkIfHasLeastOneCorrect(answers) {
@@ -95,6 +96,28 @@ class App extends React.Component {
                 };
   }
 
+  componentDidMount() {
+  }
+
+  onHWBackButton = () => {
+    if (this.currentRender === this.renderQuiz)
+    {
+      navigator.notification.confirm(
+          'You are the winner!', // message
+          this.onDialogEvent,    // callback to invoke with index of button pressed
+          'Game Over',           // title
+          ['Restart','Exit']     // buttonLabels
+      );
+    }
+  }
+
+  onDialogEvent = (index) => {
+    if (index === 2)
+    {
+      navigator.app.exitApp();
+    }
+  }
+
   onQuestionAnswered = (key, answers) => {
     for (let i = 0; i < this.questions.length; ++i) {
       if (key === this.questions[i].key) {
@@ -161,11 +184,22 @@ class App extends React.Component {
 
   f = () => {
     if (this.state.checked) {
-      return (<>
-        <Input id='questionsInRange' value={this.state.questionsInRange ? this.state.questionsInRange : ''} placeholder='# Questions' min={1} max={750} type='number' step='1' onChange={this.onSpinChange}/>
-        <Input id='first' value={this.state.first ? this.state.first : ''} placeholder='# First Q' min={1} max={749} type='number' step='1' onChange={this.onSpinChange} />
-        <Input className='mr-2' id='last' value={this.state.last ? this.state.last : ''}placeholder='# Last Q' min={2} max={750} type='number' step='1' onChange={this.onSpinChange} />
-      </>);
+      if (isAndroid) {
+        return (<>
+          <Input id='questionsInRange' className='mr-2' value={this.state.questionsInRange ? this.state.questionsInRange : ''} placeholder='# Questions' min={1} max={750} type='number' step='1' onChange={this.onSpinChange}/>
+          <InputGroup className='my-1'>
+            <Input id='first' className='ml-7' value={this.state.first ? this.state.first : ''} placeholder='# First Q' min={1} max={749} type='number' step='1' onChange={this.onSpinChange} />
+            <Input className='mr-2' id='last' value={this.state.last ? this.state.last : ''} placeholder='# Last Q' min={2} max={750} type='number' step='1' onChange={this.onSpinChange} />
+          </InputGroup>
+        </>);
+      }
+      else {
+        return (<>
+          <Input id='questionsInRange' value={this.state.questionsInRange ? this.state.questionsInRange : ''} placeholder='# Questions' min={1} max={750} type='number' step='1' onChange={this.onSpinChange}/>
+          <Input id='first' value={this.state.first ? this.state.first : ''} placeholder='# First Q' min={1} max={749} type='number' step='1' onChange={this.onSpinChange} />
+          <Input className='mr-2' id='last' value={this.state.last ? this.state.last : ''} placeholder='# Last Q' min={2} max={750} type='number' step='1' onChange={this.onSpinChange} />
+        </>);
+      }
     }
     else {
       return (<Input className='mr-2' disabled id='questions' value={this.state.questions ? this.state.questions : ''} placeholder='# Questions' min={1} max={100} type='number' step='1' onChange={this.onSpinChange}/>);
