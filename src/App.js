@@ -22,7 +22,7 @@ function checkIfHasLeastOneCorrect(answers) {
 }
 
 function getQuestionWithNAnswers(booklet, index, answersAmount) {
-  let question = booklet.questions[index];
+  let question = {...booklet.questions[index]};
   question.key = parseInt(question.key);
   let answers = [];  
   if (answersAmount < question.answers.length) {
@@ -92,29 +92,49 @@ class App extends React.Component {
                   questions:100,
                   questionsInRange:0,
                   isDebug:isDebug,
-                  answersAmount:isDebug ? 8 : 4
+                  answersAmount:isDebug ? 8 : 4,
+                  currentQuestion: 0
                 };
   }
 
   componentDidMount() {
+    document.addEventListener('backbutton', this.onHWBackButton);
+    window.addEventListener('popstate', this.onPopState);
+  }
+
+  onPopState = (e) => {
+    let state = e.state;
+    console.log('popped state: ' + state);
+    if (state === 'mainMenu') {
+      this.currentRender = this.renderMainMenu;
+      this.setState({currentQuestion: 0});
+    }
   }
 
   onHWBackButton = () => {
     if (this.currentRender === this.renderQuiz)
     {
       navigator.notification.confirm(
-          'You are the winner!', // message
+          'Did you want stop quiz and return to main menu?', // message
           this.onDialogEvent,    // callback to invoke with index of button pressed
-          'Game Over',           // title
-          ['Restart','Exit']     // buttonLabels
+          'Attention!',          // title
+          ['NO','STOP']          // buttonLabels
       );
+    }
+    else if (this.currentRender === this.renderResults)
+    {
+      this.onResultsOk();
+    }
+    else if (this.currentRender === this.renderMainMenu)
+    {
+      navigator.app.exitApp();
     }
   }
 
   onDialogEvent = (index) => {
     if (index === 2)
     {
-      navigator.app.exitApp();
+      this.onResultsOk();
     }
   }
 
@@ -124,6 +144,78 @@ class App extends React.Component {
         this.questions[i]['answers'] = answers;
       }
     }
+  }
+
+  onNextQuestion = () => {
+    let newState = {currentQuestion: this.state.currentQuestion + 1};
+    this.setState(newState);
+  }
+
+  onPriviousQuestion = () => {
+    let newState = {currentQuestion: this.state.currentQuestion - 1};
+    this.setState(newState);
+  }
+
+  renderQuizBrowser = () => {
+    window.history.pushState('mainMenu', null);
+    return (<>
+        {this.questions.map((item, index) => <Question key={item.key}
+                                            index={index + 1}
+                                            bookletId={item.key}
+                                            question={item.body}
+                                            answers={item.answers}
+                                            onQuestionAnswered={this.onQuestionAnswered}/>)}
+        <div className='d-flex flex-row wa-900px mx-auto'>
+          <Button color='success flex-fill' onClick={() => {
+            this.currentRender = this.renderResults;
+            const elapsedTime = document.getElementById('timer').innerText;
+            this.setState({elapsedTime: elapsedTime});
+            window.scrollTo(0, 0);
+          }} >Result</Button>
+        </div>
+      </>
+    );
+  }
+
+  renderQuizAndroidButtons = () => {
+    const previosLbl = "<- Previous";
+    const nextLbl = "Next ->";
+    if (this.state.currentQuestion === 0) {
+      return <Button color='primary flex-fill' onClick={this.onNextQuestion} > {nextLbl} </Button>
+    }
+    else if (this.state.currentQuestion === this.questions.length - 1) {
+    return (<>
+      <Button color='primary flex-fill mr-1' onClick={this.onPriviousQuestion} > {previosLbl} </Button>
+      <Button color='success flex-fill' onClick={() => {
+            this.currentRender = this.renderResults;
+            const elapsedTime = document.getElementById('timer').innerText;
+            this.setState({elapsedTime: elapsedTime});
+            window.scrollTo(0, 0);
+          }} >Result</Button>
+        </>);
+    }
+    else {
+      return (<>
+        <Button color='primary flex-fill mr-1' onClick={this.onPriviousQuestion} > {previosLbl} </Button>
+        <Button color='primary flex-fill ml-1' onClick={this.onNextQuestion} > {nextLbl} </Button>
+        </>);
+    }
+  }
+
+  renderQuizAndroid = () => {
+    let item = this.questions[this.state.currentQuestion];
+    return (<>
+        <Question key={item.key}
+                  index={this.state.currentQuestion + 1}
+                  bookletId={item.key}
+                  question={item.body}
+                  answers={item.answers}
+                  onQuestionAnswered={this.onQuestionAnswered}/>
+        <div className='d-flex flex-row wa-900px fixed-bottom mx-auto'>
+          {this.renderQuizAndroidButtons()}
+        </div>
+      </>
+    );
   }
 
   renderQuiz = () => {
@@ -141,27 +233,14 @@ class App extends React.Component {
             </Timer>
           </CardBody>
         </Card>
-        {this.questions.map((item, index) => <Question key={item.key}
-                                            index={index + 1}
-                                            bookletId={item.key}
-                                            question={item.body}
-                                            answers={item.answers}
-                                            onQuestionAnswered={this.onQuestionAnswered}/>)}
-        <div className='d-flex flex-column wa-900px mx-auto'>
-          <Button color='success flex-fill' onClick={() => {
-            this.currentRender = this.renderResults;
-            const elapsedTime = document.getElementById('timer').innerText;
-            this.setState({elapsedTime: elapsedTime});
-            window.scrollTo(0, 0);
-          }} >Result</Button>
-        </div>
+        {(isAndroid) ? this.renderQuizAndroid() : this.renderQuizBrowser()}
       </div>
     );
   }
 
   onResultsOk = () => {
     this.currentRender = this.renderMainMenu;
-    this.setState({});
+    this.setState({currentQuestion: 0});
   }
 
   renderResults = () => {
