@@ -19,7 +19,8 @@ var app = {
     },
 
     onDeviceReady: function() {
-        ReactDOM.render(<App />, document.getElementById('root'));
+        let androidApp = isAndroid && window.usingCordova;
+        ReactDOM.render(<App isAndroid={androidApp} />, document.getElementById('root'));
         console.log('onDeviceReady');
     },
 
@@ -32,10 +33,11 @@ var app = {
     }
 }
 
-if (isAndroid) {
-    console.log('isAndroid');
+if (isAndroid && window.usingCordova) {
+    console.log('runned on Cordova');
     app.initialize();
 }
 else {
+    console.log('runned on Browser');
     app.onDeviceReady();
 }
