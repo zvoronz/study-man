@@ -4,10 +4,9 @@ import {
   } from'reactstrap';
 import Question from './Question';
 
-class QuizResults extends React.Component
-{
-    constructor(props)
-    {
+class QuizResults extends React.Component {
+    
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -15,8 +14,7 @@ class QuizResults extends React.Component
         };
     }
 
-    render()
-    {
+    render() {
         let {questions, elapsedTime} = this.props;
 
         let pointsReached = 0, pointsFull = 0, trueAnswers = 0;
@@ -49,7 +47,7 @@ class QuizResults extends React.Component
         return (
             <div className='content'>
               <Card className='mx-auto mt-5 wa-900px'>
-                <CardTitle className='text-center h1'>Results</CardTitle>
+                <CardTitle className='text-center h1' id="top">Results</CardTitle>
                 <CardBody>
                     <CardText className='text-center h4'>Points: {pointsReached}/{pointsFull}</CardText>
                     <CardText className='text-center h4'>Score: {truePercents}%</CardText>
@@ -63,12 +61,12 @@ class QuizResults extends React.Component
                                                   answers={item.answers}
                                                   isCorrect={item.allCorrect}
                                                   isStatic />)}
-              <div className='d-flex flex-column'>
-                <Button color='primary mx-auto mb-5 wa-900px'
-                        onClick={() => this.props.onResultsOk()}>
-                    Ok
-                </Button>
-              </div>
+                <div className='d-flex flex-column wa-900px mx-auto'>
+                    <Button color='primary' className='flex-fill' id="btnOk"
+                            onClick={() => this.props.onResultsOk()}>
+                        Ok
+                    </Button>
+                </div>
             </div>
           );
     }

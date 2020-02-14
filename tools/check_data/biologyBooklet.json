@@ -1,4 +1,4 @@
-let biologyBooklet = {
+{
    "name": "Biology Booklet 2019",
    "questions": [
       {
@@ -33755,7 +33755,7 @@ let biologyBooklet = {
             },
             {
                "key": "g",
-               "body": "p",
+			   "body": "p",
                "isCorrect": false
             },
             {
@@ -34502,5 +34502,4 @@ let biologyBooklet = {
          ]
       }
    ]
-};
-export default biologyBooklet;
+}
