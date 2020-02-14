@@ -418,7 +418,7 @@ class App extends React.Component {
               if (this.state.checked) {
                 this.questions = getNRangedQuestions(biologyBooklet, this.state.questionsInRange, this.state.first, this.state.last, this.state.answersAmount);
               }
-              if (this.state.checkedList) {
+              else if (this.state.checkedList) {
                 this.questions = getQuestionsFromList(biologyBooklet, questionsList, this.state.answersAmount);
               }
               else {
