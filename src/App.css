@@ -34,6 +34,12 @@ img {
   max-width: 100%;
 }
 
+.disable__not-selected {
+  border-color: darkgreen;
+  border-width: medium;
+  border-style: dashed;
+}
+
 .disable__secondary:hover {
   background-color: transparent;
 }
@@ -44,7 +50,19 @@ img {
   background-color: #dc3545;
 }
 
+.disable__not-selected:hover {
+  border-color: darkgreen;
+  border-width: medium;
+  border-style: dashed;
+}
+
 .btn-outline-secondary:focus, .btn-outline-secondary:hover {
+  background-color: transparent;
+  outline: none;
+  box-shadow: none;
+}
+
+.btn-outline-not-selected:focus, .btn-outline-not-selected:hover {
   background-color: transparent;
   outline: none;
   box-shadow: none;
@@ -53,3 +71,8 @@ img {
 .ml-7 {
   margin-left: 4.7rem!important;
 }
+
+.btn .disabled, .btn:disabled {
+  opacity: 1;
+  margin-bottom: 2px;
+} 

@@ -26,7 +26,7 @@ class Answer extends React.Component
                     </Button>);
         }
         else {
-            let color = isSelected ? isCorrect ? 'success' : 'danger' : 'secondary';
+            let color = isSelected ? isCorrect ? 'success' : 'danger' : isCorrect ? 'not-selected' : 'secondary';
             return (<Button outline={!isSelected}
                         color={color}
                         className={'mt-0 disable__' + color}
