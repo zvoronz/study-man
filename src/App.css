@@ -35,9 +35,8 @@ img {
 }
 
 .disable__not-selected {
-  border-color: darkgreen;
-  border-width: medium;
-  border-style: dashed;
+  border-color: transparent;
+  background-color: #05ff3e82;
 }
 
 .disable__secondary:hover {
@@ -51,9 +50,8 @@ img {
 }
 
 .disable__not-selected:hover {
-  border-color: darkgreen;
-  border-width: medium;
-  border-style: dashed;
+  border-color: transparent;
+  background-color: #05ff3e82;
 }
 
 .btn-outline-secondary:focus, .btn-outline-secondary:hover {
@@ -63,9 +61,9 @@ img {
 }
 
 .btn-outline-not-selected:focus, .btn-outline-not-selected:hover {
-  background-color: transparent;
   outline: none;
   box-shadow: none;
+  background-color: #05ff3e82;
 }
 
 .ml-7 {
